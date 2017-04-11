@@ -26,11 +26,14 @@ describe('Main component unit tests', function () {
     mockery.registerMock('electron', require('../../lib/fakeElectron'))
     Main = require('../../../../js/components/main')
     NavigationBar = require('../../../../app/renderer/components/navigation/navigationBar')
+    appStoreRenderer = require('../../../../js/stores/appStoreRenderer')
   })
 
   after(function () {
     mockery.disable()
   })
+
+  let appStoreRenderer = require('../../../../js/stores/appStoreRenderer')
 
   const windowState = Immutable.fromJS({
     activeFrameKey: 0,
@@ -56,13 +59,15 @@ describe('Main component unit tests', function () {
       tabId: 1,
       canGoBack: true,
       canGoForward: true
-    }]
+    }],
+    windows: []
   })
 
   describe('when user has history going forwards and backwards', function () {
     let wrapper
 
     before(function () {
+      appStoreRenderer.state = Immutable.fromJS(appState)
       wrapper = shallow(
         <Main windowState={windowState} appState={appState} />
       )
@@ -94,6 +99,7 @@ describe('Main component unit tests', function () {
         }
       })
 
+      appStoreRenderer.state = Immutable.fromJS(appState2)
       wrapper = shallow(
         <Main windowState={windowState} appState={appState2} />
       )
@@ -128,6 +134,7 @@ describe('Main component unit tests', function () {
     let instance
 
     before(function () {
+      appStoreRenderer.state = Immutable.fromJS(appState)
       let wrapper = shallow(
         <Main windowState={windowState} appState={appState} />
       )
